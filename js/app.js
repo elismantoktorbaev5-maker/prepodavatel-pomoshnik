@@ -6,6 +6,8 @@ import * as homeScreen from "./screens/home.js";
 import * as moreScreen from "./screens/more.js";
 import * as settingsScreen from "./screens/settings.js";
 import * as installGuideScreen from "./screens/install-guide.js";
+import * as gradesScreen from "./screens/grades.js";
+import * as groupDetailScreen from "./screens/group-detail.js";
 import { makePlaceholder } from "./screens/placeholder.js";
 
 const MAIN_ROUTES = ["home", "grades", "attendance", "more"];
@@ -15,7 +17,8 @@ const registry = {
   more: moreScreen,
   settings: settingsScreen,
   "install-guide": installGuideScreen,
-  grades: makePlaceholder("Оценки", "📊", "Журнал оценок появится на следующем этапе."),
+  grades: gradesScreen,
+  group: groupDetailScreen,
   attendance: makePlaceholder("Посещаемость", "🗓️", "Отметка посещаемости появится на следующем этапе."),
   avn: makePlaceholder("AVN", "📄", "Подготовка таблицы для AVN появится на следующем этапе."),
   documents: makePlaceholder("Документы", "📚", "Открытие и редактирование документов появится позже."),
@@ -27,32 +30,35 @@ const registry = {
 
 function parseRoute() {
   const hash = window.location.hash.replace(/^#\/?/, "");
-  return hash || "home";
+  const parts = hash.split("/").filter(Boolean);
+  const name = parts[0] || "home";
+  return { name, parts };
 }
 
-function mainGroupFor(route) {
-  if (route === "home") return "home";
-  if (route === "grades") return "grades";
-  if (route === "attendance") return "attendance";
+function mainGroupFor(name) {
+  if (name === "home") return "home";
+  if (name === "grades" || name === "group") return "grades";
+  if (name === "attendance") return "attendance";
   return "more"; // всё остальное живёт внутри "Ещё"
 }
 
 async function renderRoute() {
-  const route = parseRoute();
-  const def = registry[route] || registry.home;
+  const { name, parts } = parseRoute();
+  const def = registry[name] || registry.home;
+  const params = { id: parts[1] };
 
+  const container = document.getElementById("screen-root");
   document.getElementById("screen-title").textContent = def.title || "Помощник преподавателя";
 
-  const group = mainGroupFor(route);
+  const group = mainGroupFor(name);
   document.querySelectorAll(".bottom-nav button").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.route === group);
   });
 
-  updateTopbarBack(route !== group || !MAIN_ROUTES.includes(route));
+  updateTopbarBack(!(MAIN_ROUTES.includes(name) && parts.length === 1));
 
-  const container = document.getElementById("screen-root");
   try {
-    await def.render(container);
+    await def.render(container, params);
   } catch (err) {
     console.error(err);
     container.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><h2>Что-то пошло не так</h2><p>Не получилось открыть этот раздел. Попробуйте вернуться назад и открыть его ещё раз.</p></div>`;

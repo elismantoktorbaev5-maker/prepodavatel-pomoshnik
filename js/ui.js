@@ -1,5 +1,10 @@
 // Общие элементы интерфейса: подсказки "?", подтверждение, уведомления с "Отменить".
 
+export function setScreenTitle(text) {
+  const el = document.getElementById("screen-title");
+  if (el) el.textContent = text;
+}
+
 export function createHintButton(text) {
   const btn = document.createElement("button");
   btn.type = "button";
@@ -70,6 +75,48 @@ export function confirmDialog({ title = "Вы уверены?", message = "", co
     backdrop.querySelector('[data-action="confirm"]').addEventListener("click", () => cleanup(true));
     backdrop.querySelector('[data-action="cancel"]').addEventListener("click", () => cleanup(false));
     root.appendChild(backdrop);
+  });
+}
+
+export function promptDialog({ title = "Введите значение", label = "", placeholder = "", initialValue = "", confirmLabel = "Сохранить", cancelLabel = "Отмена", multiline = false } = {}) {
+  return new Promise((resolve) => {
+    const root = document.getElementById("modal-root");
+    const backdrop = document.createElement("div");
+    backdrop.className = "modal-backdrop";
+    const fieldId = "prompt-field-" + Math.random().toString(36).slice(2);
+    backdrop.innerHTML = `
+      <div class="modal-sheet">
+        <h2>${escapeHtml(title)}</h2>
+        <div class="field">
+          ${label ? `<label for="${fieldId}">${escapeHtml(label)}</label>` : ""}
+          ${multiline
+            ? `<textarea id="${fieldId}" placeholder="${escapeHtml(placeholder)}"></textarea>`
+            : `<input id="${fieldId}" type="text" placeholder="${escapeHtml(placeholder)}">`
+          }
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary btn-block btn-lg" data-action="confirm">${escapeHtml(confirmLabel)}</button>
+          <button class="btn btn-ghost btn-block btn-lg" data-action="cancel">${escapeHtml(cancelLabel)}</button>
+        </div>
+      </div>
+    `;
+    const input = backdrop.querySelector("#" + fieldId);
+    input.value = initialValue;
+
+    function cleanup(result) {
+      backdrop.remove();
+      resolve(result);
+    }
+    backdrop.addEventListener("click", (e) => {
+      if (e.target === backdrop) cleanup(null);
+    });
+    backdrop.querySelector('[data-action="confirm"]').addEventListener("click", () => {
+      const val = input.value.trim();
+      cleanup(val.length ? val : null);
+    });
+    backdrop.querySelector('[data-action="cancel"]').addEventListener("click", () => cleanup(null));
+    root.appendChild(backdrop);
+    setTimeout(() => input.focus(), 50);
   });
 }
 
