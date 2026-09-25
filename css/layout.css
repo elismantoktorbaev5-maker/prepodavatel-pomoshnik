@@ -1,0 +1,251 @@
+/* ===== Общая раскладка приложения ===== */
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--color-bg);
+  padding: calc(var(--safe-top) + 0.85rem) 1rem 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.topbar h1 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.3rem;
+}
+.topbar .icon-btn {
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: 12px;
+  border: none;
+  background: var(--color-surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+main.screen {
+  flex: 1;
+  padding: 1rem 1rem calc(var(--nav-height) + var(--safe-bottom) + 1.5rem);
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--nav-height) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  z-index: 300;
+}
+.bottom-nav button {
+  flex: 1;
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  padding: 0.4rem 0.2rem;
+}
+.bottom-nav button .nav-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+.bottom-nav button.active {
+  color: var(--color-primary);
+}
+
+/* Плитка меню "Ещё" */
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+.tile {
+  background: var(--color-surface);
+  border-radius: 16px;
+  padding: 1.1rem 0.8rem;
+  box-shadow: 0 2px 10px var(--color-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-height: 96px;
+  text-align: left;
+  border: none;
+  color: var(--color-text);
+}
+.tile .tile-icon {
+  font-size: 1.6rem;
+}
+.tile .tile-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+/* Карточка студента (журнал/посещаемость) */
+.student-card {
+  background: var(--color-surface);
+  border-radius: 16px;
+  padding: 0.9rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 10px var(--color-shadow);
+}
+.student-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+.student-card-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+  gap: 0.6rem;
+}
+.score-cell label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.attendance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+.attendance-grid button {
+  min-height: 48px;
+  border-radius: 12px;
+  border: 2px solid var(--color-border);
+  background: var(--color-surface-2);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.attendance-grid button.selected.status-present { background: var(--color-success); color: #fff; border-color: var(--color-success); }
+.attendance-grid button.selected.status-absent { background: var(--color-danger); color: #fff; border-color: var(--color-danger); }
+.attendance-grid button.selected.status-late { background: #d99a2b; color: #fff; border-color: #d99a2b; }
+.attendance-grid button.selected.status-excused { background: #5a7fd6; color: #fff; border-color: #5a7fd6; }
+
+.home-section {
+  margin-bottom: 1.25rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--color-text-muted);
+}
+.empty-state .empty-icon {
+  font-size: 2.4rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ===== Онбординг ===== */
+.onboarding-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--safe-top) + 1.25rem) 1.25rem calc(var(--safe-bottom) + 1.25rem);
+}
+.onboarding-skip {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  min-height: 44px;
+  padding: 0 0.5rem;
+}
+.onboarding-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+}
+.onboarding-body .onboarding-icon {
+  font-size: 3.4rem;
+}
+.onboarding-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 1rem 0;
+}
+.onboarding-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+}
+.onboarding-dots span.active {
+  background: var(--color-primary);
+  width: 22px;
+  border-radius: 5px;
+}
+.install-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: left;
+  width: 100%;
+}
+.install-step {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  background: var(--color-surface);
+  border-radius: 14px;
+  padding: 0.8rem;
+}
+.install-step .step-num {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 360px) {
+  main.screen { padding-left: 0.75rem; padding-right: 0.75rem; }
+  .topbar { padding-left: 0.75rem; padding-right: 0.75rem; }
+}

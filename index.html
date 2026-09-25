@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#236360">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Помощник">
+<title>Помощник преподавателя</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar" id="topbar">
+    <h1 id="screen-title">Помощник преподавателя</h1>
+  </header>
+
+  <main class="screen" id="screen-root"></main>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <button data-route="home" class="active"><span class="nav-icon">🏠</span><span>Главная</span></button>
+    <button data-route="grades"><span class="nav-icon">📊</span><span>Оценки</span></button>
+    <button data-route="attendance"><span class="nav-icon">🗓️</span><span>Посещаемость</span></button>
+    <button data-route="more"><span class="nav-icon">⋯</span><span>Ещё</span></button>
+  </nav>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+<div id="modal-root"></div>
+<div id="onboarding-root"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
