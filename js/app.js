@@ -13,6 +13,13 @@ import * as gradeColumnsScreen from "./screens/grade-columns.js";
 import * as attendanceScreen from "./screens/attendance.js";
 import * as lessonScreen from "./screens/lesson.js";
 import * as attendanceSummaryScreen from "./screens/attendance-summary.js";
+import * as avnScreen from "./screens/avn.js";
+import * as avnSettingsScreen from "./screens/avn-settings.js";
+import * as avnDeadlinesScreen from "./screens/avn-deadlines.js";
+import * as avnGroupsScreen from "./screens/avn-groups.js";
+import * as avnExportScreen from "./screens/avn-export.js";
+import * as avnColumnsScreen from "./screens/avn-columns.js";
+import * as avnGuideScreen from "./screens/avn-guide.js";
 import { makePlaceholder } from "./screens/placeholder.js";
 
 const MAIN_ROUTES = ["home", "grades", "attendance", "more"];
@@ -29,7 +36,13 @@ const registry = {
   attendance: attendanceScreen,
   lesson: lessonScreen,
   "attendance-summary": attendanceSummaryScreen,
-  avn: makePlaceholder("AVN", "📄", "Подготовка таблицы для AVN появится на следующем этапе."),
+  avn: avnScreen,
+  "avn-settings": avnSettingsScreen,
+  "avn-deadlines": avnDeadlinesScreen,
+  "avn-groups": avnGroupsScreen,
+  "avn-export": avnExportScreen,
+  "avn-columns": avnColumnsScreen,
+  "avn-guide": avnGuideScreen,
   documents: makePlaceholder("Документы", "📚", "Открытие и редактирование документов появится позже."),
   templates: makePlaceholder("Шаблоны", "🧩", "Шаблоны документов появятся позже."),
   exercises: makePlaceholder("Задания по английскому", "✏️", "Генератор заданий появится позже."),

@@ -1,7 +1,7 @@
 // Service worker: после первой загрузки приложение работает полностью без интернета.
 // При каждом заметном обновлении файлов увеличивайте CACHE_VERSION — это заставит
 // телефоны скачать новые файлы вместо старых из кэша.
-const CACHE_VERSION = "v4";
+const CACHE_VERSION = "v5";
 const CACHE_NAME = "teacher-assistant-" + CACHE_VERSION;
 
 const PRECACHE_URLS = [
@@ -16,6 +16,8 @@ const PRECACHE_URLS = [
   "js/theme.js",
   "js/onboarding.js",
   "js/repo.js",
+  "js/avn.js",
+  "js/share.js",
   "js/screens/home.js",
   "js/screens/more.js",
   "js/screens/settings.js",
@@ -28,6 +30,13 @@ const PRECACHE_URLS = [
   "js/screens/attendance.js",
   "js/screens/lesson.js",
   "js/screens/attendance-summary.js",
+  "js/screens/avn.js",
+  "js/screens/avn-settings.js",
+  "js/screens/avn-deadlines.js",
+  "js/screens/avn-groups.js",
+  "js/screens/avn-export.js",
+  "js/screens/avn-columns.js",
+  "js/screens/avn-guide.js",
   "icons/icon-192.png",
   "icons/icon-512.png",
   "icons/icon-maskable-192.png",
