@@ -10,6 +10,9 @@ import * as gradesScreen from "./screens/grades.js";
 import * as groupDetailScreen from "./screens/group-detail.js";
 import * as journalScreen from "./screens/journal.js";
 import * as gradeColumnsScreen from "./screens/grade-columns.js";
+import * as attendanceScreen from "./screens/attendance.js";
+import * as lessonScreen from "./screens/lesson.js";
+import * as attendanceSummaryScreen from "./screens/attendance-summary.js";
 import { makePlaceholder } from "./screens/placeholder.js";
 
 const MAIN_ROUTES = ["home", "grades", "attendance", "more"];
@@ -23,7 +26,9 @@ const registry = {
   group: groupDetailScreen,
   journal: journalScreen,
   "grade-columns": gradeColumnsScreen,
-  attendance: makePlaceholder("Посещаемость", "🗓️", "Отметка посещаемости появится на следующем этапе."),
+  attendance: attendanceScreen,
+  lesson: lessonScreen,
+  "attendance-summary": attendanceSummaryScreen,
   avn: makePlaceholder("AVN", "📄", "Подготовка таблицы для AVN появится на следующем этапе."),
   documents: makePlaceholder("Документы", "📚", "Открытие и редактирование документов появится позже."),
   templates: makePlaceholder("Шаблоны", "🧩", "Шаблоны документов появятся позже."),
@@ -42,7 +47,7 @@ function parseRoute() {
 function mainGroupFor(name) {
   if (name === "home") return "home";
   if (name === "grades" || name === "group" || name === "journal" || name === "grade-columns") return "grades";
-  if (name === "attendance") return "attendance";
+  if (name === "attendance" || name === "lesson" || name === "attendance-summary") return "attendance";
   return "more"; // всё остальное живёт внутри "Ещё"
 }
 

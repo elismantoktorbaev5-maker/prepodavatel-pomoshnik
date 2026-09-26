@@ -1,7 +1,7 @@
 // Service worker: после первой загрузки приложение работает полностью без интернета.
 // При каждом заметном обновлении файлов увеличивайте CACHE_VERSION — это заставит
 // телефоны скачать новые файлы вместо старых из кэша.
-const CACHE_VERSION = "v3";
+const CACHE_VERSION = "v4";
 const CACHE_NAME = "teacher-assistant-" + CACHE_VERSION;
 
 const PRECACHE_URLS = [
@@ -25,6 +25,9 @@ const PRECACHE_URLS = [
   "js/screens/group-detail.js",
   "js/screens/journal.js",
   "js/screens/grade-columns.js",
+  "js/screens/attendance.js",
+  "js/screens/lesson.js",
+  "js/screens/attendance-summary.js",
   "icons/icon-192.png",
   "icons/icon-512.png",
   "icons/icon-maskable-192.png",

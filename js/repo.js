@@ -147,6 +147,61 @@ export function computeGrade(total, scale) {
   return { tier: "fail", label: "2 (неудовлетворительно)" };
 }
 
+// ===== Посещаемость =====
+
+export function todayISO() {
+  const d = new Date();
+  const tz = d.getTimezoneOffset() * 60000;
+  return new Date(d - tz).toISOString().slice(0, 10);
+}
+
+export const ATTENDANCE_LABELS = {
+  present: "Был",
+  absent: "Не был",
+  late: "Опоздал",
+  excused: "Уважительная",
+};
+
+export async function getAttendance(studentId, date) {
+  return db.getByIndex("attendance", "studentDate", [studentId, date]);
+}
+
+export async function setAttendanceStatus(studentId, date, status) {
+  const existing = await getAttendance(studentId, date);
+  if (existing && existing.status === status) {
+    await db.delete("attendance", existing.id);
+    return null;
+  }
+  if (existing) {
+    existing.status = status;
+    await db.put("attendance", existing);
+  } else {
+    await db.put("attendance", { studentId, date, status });
+  }
+  return status;
+}
+
+export async function markAllPresent(students, date) {
+  for (const s of students) {
+    const existing = await getAttendance(s.id, date);
+    if (existing) {
+      existing.status = "present";
+      await db.put("attendance", existing);
+    } else {
+      await db.put("attendance", { studentId: s.id, date, status: "present" });
+    }
+  }
+}
+
+export async function getAttendanceSummary(studentId) {
+  const records = await db.getAllByIndex("attendance", "studentId", studentId);
+  const summary = { present: 0, absent: 0, late: 0, excused: 0 };
+  for (const r of records) {
+    if (summary[r.status] != null) summary[r.status]++;
+  }
+  return summary;
+}
+
 export async function renameStudent(id, fullName) {
   const s = await db.get("students", id);
   if (!s) return;
