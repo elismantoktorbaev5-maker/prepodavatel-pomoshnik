@@ -64,6 +64,89 @@ export async function addStudentsBulk(groupId, namesText) {
   return created.length;
 }
 
+// ===== Колонки оценок =====
+
+const DEFAULT_COLUMNS = [
+  { name: "Модуль 1", maxScore: 30 },
+  { name: "Модуль 2", maxScore: 30 },
+  { name: "Итоговый контроль", maxScore: 40 },
+];
+
+export async function listColumns(groupId) {
+  const cols = await db.getAllByIndex("gradeColumns", "groupId", groupId);
+  return cols.sort((a, b) => (a.order ?? a.id) - (b.order ?? b.id));
+}
+
+export async function ensureDefaultColumns(groupId) {
+  const existing = await listColumns(groupId);
+  if (existing.length) return existing;
+  const created = [];
+  for (let i = 0; i < DEFAULT_COLUMNS.length; i++) {
+    const c = DEFAULT_COLUMNS[i];
+    const id = await db.put("gradeColumns", { groupId, name: c.name, maxScore: c.maxScore, order: i });
+    created.push({ id, groupId, ...c, order: i });
+  }
+  return created;
+}
+
+export async function createColumn(groupId, name, maxScore) {
+  const existing = await listColumns(groupId);
+  const order = existing.length ? Math.max(...existing.map((c) => c.order ?? 0)) + 1 : 0;
+  return db.put("gradeColumns", { groupId, name: name.trim(), maxScore: Number(maxScore) || 0, order });
+}
+
+export async function updateColumn(id, { name, maxScore }) {
+  const col = await db.get("gradeColumns", id);
+  if (!col) return;
+  if (name != null) col.name = name.trim();
+  if (maxScore != null) col.maxScore = Number(maxScore) || 0;
+  await db.put("gradeColumns", col);
+}
+
+export async function deleteColumnCascade(id) {
+  const grades = await db.getAllByIndex("grades", "columnId", id);
+  for (const g of grades) await db.delete("grades", g.id);
+  await db.delete("gradeColumns", id);
+}
+
+// ===== Оценки =====
+
+export async function getScore(studentId, columnId) {
+  const row = await db.getByIndex("grades", "studentColumn", [studentId, columnId]);
+  return row ? row.score : null;
+}
+
+export async function listScoresForStudent(studentId) {
+  return db.getAllByIndex("grades", "studentId", studentId);
+}
+
+export async function setScore(studentId, columnId, score) {
+  const existing = await db.getByIndex("grades", "studentColumn", [studentId, columnId]);
+  if (score === null || score === "") {
+    if (existing) await db.delete("grades", existing.id);
+    return;
+  }
+  const value = Math.max(0, Number(score));
+  if (existing) {
+    existing.score = value;
+    await db.put("grades", existing);
+  } else {
+    await db.put("grades", { studentId, columnId, score: value });
+  }
+}
+
+// ===== Шкала итоговой оценки =====
+
+export const DEFAULT_GRADE_SCALE = { excellent: 87, good: 74, pass: 61 };
+
+export function computeGrade(total, scale) {
+  const s = scale || DEFAULT_GRADE_SCALE;
+  if (total >= s.excellent) return { tier: "excellent", label: "5 (отлично)" };
+  if (total >= s.good) return { tier: "good", label: "4 (хорошо)" };
+  if (total >= s.pass) return { tier: "pass", label: "3 (удовлетворительно)" };
+  return { tier: "fail", label: "2 (неудовлетворительно)" };
+}
+
 export async function renameStudent(id, fullName) {
   const s = await db.get("students", id);
   if (!s) return;

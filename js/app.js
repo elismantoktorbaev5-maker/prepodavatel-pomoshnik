@@ -8,6 +8,8 @@ import * as settingsScreen from "./screens/settings.js";
 import * as installGuideScreen from "./screens/install-guide.js";
 import * as gradesScreen from "./screens/grades.js";
 import * as groupDetailScreen from "./screens/group-detail.js";
+import * as journalScreen from "./screens/journal.js";
+import * as gradeColumnsScreen from "./screens/grade-columns.js";
 import { makePlaceholder } from "./screens/placeholder.js";
 
 const MAIN_ROUTES = ["home", "grades", "attendance", "more"];
@@ -19,6 +21,8 @@ const registry = {
   "install-guide": installGuideScreen,
   grades: gradesScreen,
   group: groupDetailScreen,
+  journal: journalScreen,
+  "grade-columns": gradeColumnsScreen,
   attendance: makePlaceholder("Посещаемость", "🗓️", "Отметка посещаемости появится на следующем этапе."),
   avn: makePlaceholder("AVN", "📄", "Подготовка таблицы для AVN появится на следующем этапе."),
   documents: makePlaceholder("Документы", "📚", "Открытие и редактирование документов появится позже."),
@@ -37,7 +41,7 @@ function parseRoute() {
 
 function mainGroupFor(name) {
   if (name === "home") return "home";
-  if (name === "grades" || name === "group") return "grades";
+  if (name === "grades" || name === "group" || name === "journal" || name === "grade-columns") return "grades";
   if (name === "attendance") return "attendance";
   return "more"; // всё остальное живёт внутри "Ещё"
 }

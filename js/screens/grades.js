@@ -34,7 +34,7 @@ export async function render(container) {
     for (const g of groups) {
       const count = await countStudents(g.id);
       const card = document.createElement("a");
-      card.href = `#/group/${g.id}`;
+      card.href = `#/journal/${g.id}`;
       card.className = "card";
       card.style.display = "block";
       card.style.textDecoration = "none";

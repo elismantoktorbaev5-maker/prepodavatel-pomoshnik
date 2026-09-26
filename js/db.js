@@ -87,6 +87,15 @@ export const db = {
     });
   },
 
+  async getByIndex(storeName, indexName, key) {
+    const store = await tx(storeName, "readonly");
+    return new Promise((resolve, reject) => {
+      const r = store.index(indexName).get(key);
+      r.onsuccess = () => resolve(r.result || null);
+      r.onerror = () => reject(r.error);
+    });
+  },
+
   async put(storeName, value) {
     const store = await tx(storeName, "readwrite");
     return new Promise((resolve, reject) => {
